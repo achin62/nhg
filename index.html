@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="musik2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="section">
+        <div class="section__background">
+            <img id="backgroundImage" class="section__background-image"
+                src="https://yildirimzlm.s3.us-east-2.amazonaws.com/post-malone-2.jpeg" alt="">
+        </div>
+        <div class="music-card__wrapper">
+            <div class="music-card">
+                <div class="music-card__content">
+                    <img class="music-image" src="./images/ptn3.jpg" alt="">
+                    <div class="music-info">
+                        <h2 class="music-name">Beside You</h2>
+                        <p class="music-artist">Keshi_nhg</p>
+                    </div>
+                    <audio src="./songs/BesideYou.mp3"></audio>
+                    <div class="music-progress">
+                        <div id="progress-bar" class="music-progress-bar"></div>
+                        <div class="musrogress__time">
+                            <span class="music-progress__time-item music-current-time">00:00</span>
+                            <span class="music-progress__time-item music-duration-time">00:00</span>
+                        </div>
+                    </div>
+                    <div class="music-controls">
+                        <div id="prev" class="music-controls-item">
+                            <i class="fa fa-backward music-controls-item--icon"></i>
+                        </div>
+
+                        <div id="play" class="music-controls-item">
+                            <i class="fa fa-play music-controls-item--icon play-icon"></i>
+                            <div class="play-icon-background"></div>
+                        </div>
+
+                        <div id="next" class="music-controls-item">
+                            <i class="fa fa-forward music-controls-item--icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const next = document.querySelector('#next');
+    const play = document.querySelector('#play');
+    const prev = document.querySelector('#prev');
+    const progressBar = document.querySelector('#progress-bar');
+    const musicTitle = document.querySelector('.music-name');
+    const musicCard = document.querySelector('.music-card');
+    const musicArtist = document.querySelector('.music-artist');
+    const musicCover = document.querySelector('.music-image');
+    const musicCurrentTime = document.querySelector('.music-current-time');
+    const musicDurationTime = document.querySelector('.music-duration-time');
+    const backgroundImage = document.querySelector('#backgroundImage');
+    const music = document.querySelector('audio');
+    const progressZone = document.querySelector('.music-progress');
+
+    let isPlaying = false;
+    // default select first music
+    let selectedMusic = 1;
+
+    play.addEventListener('click', () => {
+        isPlaying ? pauseMusic() : playMusic()
+    });
+
+    const playList = [{
+        artist: 'AG_cogiaonho',
+        cover: 'images/ptn3.jpg',
+        musicName: '34+35',
+        musicPath: `songs/AG.mp3`
+    }, {
+        artist: 'C0^ ja0 nho',
+        cover: 'images/ptn8.jpg',
+        musicName: 'build a bitch',
+        musicPath: `songs/build a bitch.mp3`
+    }, {
+        artist: 'cô giáo đáng iu',
+        cover: 'images/anh3.jpg',
+        musicName: 'Ocean Eyes',
+        musicPath: `songs/AG.mp3`
+    }, {
+        artist: 'Bruno nhugu',
+        cover: 'images/ptn3.jpg',
+        musicName: 'talking to the moon',
+        musicPath: `songs/talking to the moon.mp3`
+    }, {
+        artist: 'leave the dorr open',
+        cover: 'images/ptn4.jpg',
+        musicName: 'leave the dorr open',
+        musicPath: `songs/Leave The Door Open - Bruno Mars_ Anders.mp3`
+    }, {
+        artist: 'AG_cogiaonho',
+        cover: 'images/ptn3.jpg',
+        musicName: '34+35',
+        musicPath: `songs/AG.mp3`
+    },
+    {
+        artist: 'C0^ ja0 nho?',
+        cover: 'images/anh1.jpg',
+        musicName: 'Perfect',
+        musicPath: `songs/Perfect.mp3`
+    }, {
+        artist: 'H3ll0 C0^ ja0 nho?',
+        cover: 'images/ptn5.jpg',
+        musicName: 'Tay Tooo',
+        musicPath: `songs/Tay To.mp3`
+    },{
+        artist: 'Hi C0^ ja0 nho?',
+        cover: 'images/ptn6.jpg',
+        musicName: 'Hooligan',
+        musicPath: `songs/ToTheMoon.mp3`
+    }]
+
+    const playMusic = () => {
+        music.play();
+        document.querySelector('.play-icon').classList.replace('fa-play', 'fa-pause')
+        isPlaying = true;
+        fadeInCover();
+        musicCard.classList.add('middle-weight');
+        setTimeout(() => {
+            musicCard.classList.remove('middle-weight');
+        }, 200)
+    }
+
+    const pauseMusic = () => {
+        music.pause();
+        document.querySelector('.play-icon').classList.replace('fa-pause', 'fa-play')
+        isPlaying = false;
+        fadeInCover();
+        musicCard.classList.add('middle-weight');
+        setTimeout(() => {
+            musicCard.classList.remove('middle-weight');
+        }, 200)
+    }
+
+    const nextMusic = () => {
+        selectedMusic = (selectedMusic + 1) % playList.length
+        loadMusic(playList[selectedMusic]);
+        music.duration = 0;
+        if (isPlaying) {
+            music.play()
+        }
+        musicCard.classList.add('right-weight');
+        progressBar.style.width = `0%`
+        setTimeout(() => {
+            musicCard.classList.remove('right-weight');
+        }, 200)
+    }
+
+    const prevMusic = () => {
+        selectedMusic = (selectedMusic - 1 + playList.length) % playList.length
+        loadMusic(playList[selectedMusic]);
+        if (isPlaying) {
+            music.play()
+        }
+        musicCard.classList.add('left-weight');
+        progressBar.style.width = `0%`
+        setTimeout(() => {
+            musicCard.classList.remove('left-weight');
+        }, 200)
+    }
+
+    const loadMusic = (playList) => {
+        musicArtist.textContent = playList.artist;
+        musicTitle.textContent = playList.musicName;
+        music.src = playList.musicPath;
+        musicCover.src = `${playList.cover}`;
+        backgroundImage.src = `${playList.cover}`;
+        backgroundImage.animate([{
+            opacity: 0,
+        }, {
+            opacity: 1,
+        }], {
+            duration: 400,
+        });
+        fadeInCover();
+    }
+
+    const fadeInCover = () => {
+        musicCover.classList.add('animate')
+        setTimeout(() => {
+            musicCover.classList.remove('animate')
+        }, 300)
+    }
+
+    // Update progress
+    const updateProgress = (e) => {
+        const {
+            duration,
+            currentTime
+        } = e.srcElement;
+        const progressPercent = (currentTime / duration) * 100
+        progressBar.style.width = `${progressPercent}%`
+
+        if (progressPercent == 100) {
+            setTimeout(() => {
+                nextMusic()
+            }, 500);
+        }
+    }
+
+    // Set progress
+    function setProgress(e) {
+        const width = this.clientWidth;
+        const setPoint = e.offsetX;
+        const duration = music.duration;
+        music.currentTime = (setPoint / width) * duration;
+    }
+
+    // Set time area
+    const setMusicTime = (e) => {
+        const {
+            duration,
+            currentTime
+        } = e.srcElement;
+        calcSongTime(duration, musicDurationTime);
+        calcSongTime(currentTime, musicCurrentTime);
+    }
+
+    const calcSongTime = (time, selectTime) => {
+        time = Number(time);
+        const m = Math.floor(time % 3600 / 60);
+        const s = Math.floor(time % 3600 % 60);
+        if (m < 10) {
+            minute = "0" + m;
+        } else minute = m
+        if (s < 10) {
+            second = "0" + s;
+        } else second = s
+
+        return selectTime.textContent = `${minute}:${second}`;
+    }
+
+
+
+    next.addEventListener('click', nextMusic);
+    prev.addEventListener('click', prevMusic);
+    music.addEventListener('timeupdate', updateProgress);
+    music.addEventListener('timeupdate', setMusicTime);
+    progressZone.addEventListener('click', setProgress)
+
+    function cardAnimate(e) {
+        this.querySelectorAll('.music-card').forEach(function (boxMove) {
+            const x = -((window.innerWidth) / 3 - e.pageX) / 90
+            const y = ((window.innerHeight) / 3 - e.pageY) / 30
+            boxMove.style.transform = "rotateY(" + x + "deg) rotateX(" + y + "deg)"
+        });
+    }
+</script>
+
+</html>
