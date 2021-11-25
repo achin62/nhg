@@ -58,6 +58,14 @@ body {
     z-index: 2;
 }
 
+.music-card__wrapper h3{
+    color: white;
+    padding: 5px;
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 15px;
+    cursor: pointer;
+}
 .music-card.right-weight {
     transform: rotateY(4deg) rotateX(-5deg);
 }
